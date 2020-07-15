@@ -5,7 +5,8 @@ let completed = document.querySelector(".completed");
 let clear = document.querySelector(".clearcompleted");
 let ul = document.querySelector(".list");
 let footer = document.querySelector(".footer");
-let arrow= document.querySelector('.img')
+let arrow= document.querySelector('.img');
+let left=document.querySelector('.left');
 let store = Redux.createStore(reducer);
 
 function reducer(state = { list: [], tab: "all" }, action) {
@@ -42,7 +43,23 @@ function reducer(state = { list: [], tab: "all" }, action) {
         return {...state,list:state.list.filter(todo=> !todo.isDone)}
     }
     case 'ARROW_SELECT':{
-      
+     newList=state.list.filter(todo=> !todo.isDone)
+     if(newList.length >0){
+         console.log('we are in true')
+         
+        return{...state,list:state.list.map(todo=>{
+            todo.isDone=true
+            return todo
+            
+         })}
+     }else{
+        console.log('we are in false')
+
+         return{...state,list:state.list.map(todo=>{
+             todo.isDone=false
+             return todo
+         })}
+     }
       
     }
   }
@@ -52,7 +69,7 @@ function createUi() {
     ul.innerHTML = "";
     const todos = store.getState();
     console.log(store.getState(), "here");
-  let filterTodo=todos.list.filter(todo => {
+  let filterTodo= todos.list.filter(todo => {
       if(todos.tab == "active" && todo.isDone == false) {
           return todo
 
@@ -64,6 +81,8 @@ function createUi() {
     }
   })
   console.log(filterTodo,"filttr")
+  leftList=filterTodo.filter(todo=> !todo.isDone)
+  left.innerHTML=`${leftList.length} items left`
   filterTodo.forEach((todo) => {
     let li = document.createElement("li");
     let p = document.createElement("p");
@@ -91,7 +110,7 @@ function createUi() {
       });
     });
     p.innerHTML = todo.text;
-
+    
     li.append(checkInput, p, spanX);
     ul.append(li);
   });
