@@ -127,8 +127,12 @@ img{
     /* width: 330px; */
     /* height: 50px; */ 
     border: 1px solid white;
-    padding: 
+   
     /* box-shadow: 2px 5px 10px 1px #E0E0E0; */
     background-color: #FEFEFE;
 
+}
+.edit-input{
+    margin: 10px 0;
+    font-size: 24px;
 }

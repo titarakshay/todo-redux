@@ -42,6 +42,15 @@ function reducer(state = { list: [], tab: "all" }, action) {
     case "CLEAR_COMPLETED":{
         return {...state,list:state.list.filter(todo=> !todo.isDone)}
     }
+    case 'EDIT_TODO':{
+      return{...state,list:state.list.map(todo=>{
+        if(todo.id == action.load.id){
+          todo.text = action.load.text
+          return todo
+        }
+        return todo
+      })}
+    }
     case 'ARROW_SELECT':{
      newList=state.list.filter(todo=> !todo.isDone)
      if(newList.length >0){
@@ -63,6 +72,25 @@ function reducer(state = { list: [], tab: "all" }, action) {
       
     }
   }
+}
+
+handleEdit=(event,id)=>{
+  let text=event.target.innerText;
+  const input=document.createElement('input');
+  input.classList.add('edit-input')
+  input.value=text
+  event.target.parentElement.replaceChild(input,event.target)
+  input.addEventListener('keyup',(event)=>{
+    if(event.keyCode == 13){
+      store.dispatch({
+        type:'EDIT_TODO',
+        load:{
+          id,
+          text:input.value
+        }
+      })
+    }
+  })
 }
 
 function createUi() {
@@ -110,7 +138,7 @@ function createUi() {
       });
     });
     p.innerHTML = todo.text;
-    
+    p.addEventListener('dblclick',()=>handleEdit(event,todo.id))
     li.append(checkInput, p, spanX);
     ul.append(li);
   });
